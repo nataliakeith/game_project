@@ -1,4 +1,13 @@
-from connection import get_connection
+import mysql.connector
+import random
+
+connection = mysql.connector.connect(host="127.0.0.1",
+            port=3306,
+            database="flight_game",
+            user="root",
+            password='y""o32',
+            autocommit=True)
+cursor = connection.cursor(dictionary=True)
 
 
 # Check if all passengers have been used
@@ -118,4 +127,3 @@ def count_aliens(conn):
 
 #     conn.commit()
 
-main()

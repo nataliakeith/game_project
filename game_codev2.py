@@ -1,6 +1,14 @@
+import mysql.connector
 import random
 
-from connection import get_connection
+connection = mysql.connector.connect(host="127.0.0.1",
+            port=3306,
+            database="flight_game",
+            user="root",
+            password='y""o32',
+            autocommit=True)
+cursor = connection.cursor(dictionary=True)
+
 from systems.energy import update_energy
 from systems.budget import update_budget
 from systems.reputation import update_reputation, reputation_emoji
@@ -8,10 +16,9 @@ from systems.sustainability import update_sustainability
 from systems.backstabber import check_backstabber, backstab
 from session import count_aliens
 
-connection = get_connection()
 cursor = connection.cursor(dictionary=True)
 
-#this line is to fix bothv values in the tables that was error
+#this line is to fix both values in the tables that was error
 cursor.execute("update false_ticket set flight_time=%s where ticket_id=50;", ("00:00",))
 cursor.execute("update false_ticket set flight_date=%s where ticket_id=38;", ("2026-03-12",))
 connection.commit()
@@ -21,7 +28,7 @@ cursor.execute("update regular_ticket set departure_airport=(select name from ai
 cursor.execute("update false_ticket set departure_airport=(select name from airport order by rand() limit 1), arrival_airport=(select name from airport order by rand() limit 1);")
 connection.commit()
 
-# this for humans and aliens generating
+# this for generating humans and aliens
 cursor.execute("select * from passenger where true_species=1 order by rand() limit 14;")
 humans = cursor.fetchall()
 cursor.execute("select * from passenger where true_species=0 order by rand() limit 7;")
@@ -29,7 +36,7 @@ aliens = cursor.fetchall()
 passengers = humans + aliens
 random.shuffle(passengers)
 
-#the dates and correspoding ids, this can't be change, otherwise will be broken if ppl get on huamns wrong dates
+#the dates and corresponding ids, this can't be change, otherwise will be broken if ppl get on huamns wrong dates
 regular_ticket_dates = {"01": (1, 11), "03": (12, 23), "05": (24, 36), "06": (37, 50), "09": (51, 67), "12": (68, 86), "15": (87, 99)}
 false_ticket_dates = {"01": (1, 14), "03": (15, 34), "05": (49, 63), "06": (64, 77), "09": (78, 88), "12": (89, 99), "15": (35, 48)}
 days = ["01", "03", "05", "06", "09", "12", "15"]
@@ -136,11 +143,12 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
         print("Options:")
         print("1) Ask for age")
         print("2) Ask for ticket")
-        print("3) Use boost (check for surprise factor)") #we should add how aliens will give us boost, to use to see surprise factor, so this should be block if u dont have boost.
+        print("3) Use boost (check for surprise factor)")
         print("4) Next passenger")
         print("5) APPROVE passenger")
         print("6) DENY passenger")
         print("7) Tutorial")
+        print("8) Check your status ")
 
         choice = input("Choose 1-7: ")
 
@@ -175,9 +183,6 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
             else:
                 print("You have no boosts.")
 
-            
-            
-
         elif choice == "4":
             return ("none", passenger_true_species)
 
@@ -190,6 +195,13 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
         elif choice == "7":
             tutorial()
             continue
+
+        elif choice == "8":
+            print("Energy:", state["energy"])
+            print("Budget:", state["budget"])
+            print("Reputation:", state["reputation"], reputation_emoji(state["reputation"]))
+            print("Sustainability:", state["sustainability"])
+            print()
         else:
             print("Invalid. Type 1-7.")
 
