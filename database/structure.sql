@@ -135,6 +135,23 @@ CREATE TABLE `passport` (
 ) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--Table structure for table 'session'
+
+
+DROP TABLE IF EXISTS `session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `session` ( 
+`id` int NOT NULL AUTO_INCREMENT, 
+`passenger_id` int NOT NULL, 
+`order_index` int DEFAULT NULL, 
+`used` tinyint(1) DEFAULT 0, 
+`allowed_in` tinyint(1) DEFAULT NULL, 
+PRIMARY KEY (`id`) 
+); 
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 --
 -- Table structure for table `regular_ticket`
 --
