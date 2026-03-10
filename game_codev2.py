@@ -149,17 +149,22 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
             print("Passenger says:", passport["age"])
 
         elif choice == "2":
-            print('You: "Show me your ticket."')
-            cursor.execute(f"select departure_airport, arrival_airport, flight_date, flight_time, seat from {ticket_table} where ticket_id=%s;",
-                           (ticket_id,))
-            ticket = cursor.fetchone()
 
-            print("TICKET")
-            print("Departure airport:", ticket["departure_airport"])
-            print("Arrival airport:", ticket["arrival_airport"])
-            print("Flight date:", ticket["flight_date"])
-            print("Flight time:", ticket["flight_time"])
-            print("Seat:", ticket["seat"])
+            if state["inspection_blocked"]:
+                print("The inspection system is offline today")
+            else:
+                print('You: "Show me your ticket."')
+                cursor.execute(f"select departure_airport, arrival_airport, flight_date, flight_time, seat from {ticket_table} where ticket_id=%s;",
+                           (ticket_id,))
+                ticket = cursor.fetchone()
+                print("TICKET")
+                print("Departure airport:", ticket["departure_airport"])
+                print("Arrival airport:", ticket["arrival_airport"])
+                print("Flight date:", ticket["flight_date"])
+                print("Flight time:", ticket["flight_time"])
+                print("Seat:", ticket["seat"])
+
+            
 
         elif choice == "3":
 
@@ -206,7 +211,8 @@ state = {
     "budget": 10000,                                                            #I added this so the game stores our stasts in a dictonary
     "reputation": 100,
     "sustainability": 100,
-    "surprise_boost_days": 0                                                    #TO COUNT DAYS OF BOOST LEFT!
+    "surprise_boost_days": 0,                                                    #TO COUNT DAYS OF BOOST LEFT!
+    "inspection_blocked":False                                                   #FOR POTENTIAL TO BLOCK INSPECTION
 }
 
 passenger_index = 0
@@ -221,6 +227,14 @@ for day in days:
     print("Reputation:", state["reputation"], reputation_emoji(state["reputation"]))
     print("Sustainability:", state["sustainability"])
     print()
+
+    # state["inspection_blocked"] = False                              #IF WE GET THE BLOCK INSPECTION EVENT.RESETS BLOCKED INSPECTION JUST IN CASE
+    
+
+    # from systems.events import daily_event                           #PER DAY WE GET A DAILY EVENT
+
+    # state = daily_event(state)                                           
+
 
 
     approved_humans = 0
@@ -289,6 +303,13 @@ for day in days:
                 denied_aliens += 1
 
     day_summary(day, approved_humans, denied_humans, approved_aliens, denied_aliens)
+
+    state["inspection_blocked"] = False     #IF WE GET THE BLOCK INSPECTION EVENT.RESETS BLOCKED INSPECTION JUST IN CASE
+
+    from systems.events import daily_event #PER DAY WE GET A DAILY EVENT
+
+    state = daily_event(state)
+
 
     alien_count = count_aliens(connection)
 
