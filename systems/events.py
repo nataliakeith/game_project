@@ -7,7 +7,9 @@ def daily_event(state):
         power_outage,                                            #
         government_audit,
         staff_kidnap,
-        system_malfunction
+        system_malfunction,
+        passengers_flu,
+        fire_in_the_hole,
     ]
 
     event = random.choice(events)
@@ -102,3 +104,61 @@ def system_malfunction(state):
     state["inspection_blocked"] = True
 
     return state
+
+#EEVENT FIVEEEEEEEE
+
+def passengers_flu(state):
+    print("\n--- DAILY EVENT ---")
+    print("Passengers have being contaminated by a odd flu.")
+    print("The flu makes them laugh hysterically.")
+    print("1) Quarantine some areas of the airport, to stop the spreading")
+    print("2) Let them laugh until it passes")
+
+    choice = input("Choose: ")
+
+    if choice == "1":
+        print("You quarantined part of the airport.")
+        state["budget"] -= 1000
+        state["reputation"] += 10
+        state["sustainability"] += 10
+
+    else:
+        print("Now everybody is laughing thanks to you!")
+        print("That would be great, if this was stand-up comedy.")
+
+        state["reputation"] -= 10
+        state["sustainability"] -= 10
+
+    return state
+
+
+#EVENT SIXXXXX
+
+def fire_in_the_hole(state):
+    print("Some sectors in the Airport caught fire.")
+    print("1) You can appeal to the public and get donations creating a funding.")
+    print("2) You can pay and fix it yourself.")
+
+    choice= input("Choose: ")
+
+    if choice == "1":
+        donations = random.randint(1, 1000)
+        state["budget"] += donations
+        if donations >= 500:
+            print("You have gotten enough donations to control the fire and fix the airport")
+            state["budget"] -= 500
+        if donations < 500:
+            print("Nobody really cared about the funding you created, I guess all that crying wasn't enough")
+            state["reputation"] -= 25
+    else:
+        print("The fire has been controlled, no need for crying on TV.")
+        state["budget"] -= 500
+
+    return state
+
+
+
+
+
+
+
