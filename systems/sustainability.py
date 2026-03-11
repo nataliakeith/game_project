@@ -1,6 +1,6 @@
 def update_sustainability(current_value, alien_count):
 
-    waste_penalty = alien_count * 5
+    waste_penalty = alien_count * 15
 
     new_value = current_value - waste_penalty
 

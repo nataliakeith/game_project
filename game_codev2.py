@@ -95,13 +95,21 @@ for row in passports: #humans passport has k=2 so 2 uppercase letter and 6 digit
 connection.commit()
 
 def tutorial(): #this function is for game tutorial.
-    print("How to identify anomalies")
-    print("1. Passport expiration date: Some passengers have expired passports or odd dates")
-    print("2. Passport number format: Some passengers have odd format, with uncommon number of digits or letters")
-    print("3. Age: Some passengers might have unmatching age to birth date")
-    print("4. Boosts: Boosts are given by aliens with a good heart, they reveal surprise factor which give you further information on the passenger true species. But some of these creatures might fool you, be aware.")
-    print("Be aware that alien presence affects airport sustainability, energy and reputation, if too many pass, you lose.")
-
+    print()
+    print("=====How to identify anomalies=====")
+    print()
+    print("**Every alien will have one or more odd information that gives you clues about their true species**")
+    print()
+    print("1. Passport expiration date: Humans always have expiration date between 1 and 10 years.")
+    print("2. Passport number format: Humans passports have 2 uppercase letters and 6 digits.")
+    print("3. Age: Some passengers might have unmatching age to birth date, that indicates a anomaly.")
+    print("4. Boosts: Boosts are given by aliens with a good heart, they reveal surprise factor which give you further information on the passenger true species.")
+    print("*Some of these creatures might fool you, choose wisely.")
+    print("5. False documents: Check for any uncommon typing in the documents the passenger presents to you, whether is ticket or passport.")
+    print("6. Description: Reading the description of the passenger might give you clues about who they are.")
+    print()
+    print("**Be aware that aliens presence and events affects airport sustainability, energy, reputation and budget, if too many aliens pass, you lose**")
+    print()
 #function to set maximum and minimum values to status
 def max_state(state):
     if state["energy"] > 100:
@@ -138,9 +146,11 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
     print("----------------------------------------")
 
 #calls passport
+
     print("========================================================")
     print('You: "Hello. Passport control. May I see your passport?"')
     print("========================================================")
+
 
     cursor.execute(
         "select passenger.last_name, passenger.first_name, passenger.nationality, passenger.birth_date, passenger.sex, passenger.place_birth, passenger.age, passport.passport_number, passport.issuing_country, passport.expiration_date "
@@ -148,7 +158,7 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
         (passenger_id,)
     )
     passport = cursor.fetchone()
-
+    print()
     print("====PASSPORT====")
     print("Surname:", passport["last_name"])
     print("Given names:", passport["first_name"])
@@ -160,8 +170,10 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
     print("Issuing Country:", passport["issuing_country"])
     print("Date of expiry:", passport["expiration_date"])
 
+
 #Interactions available after seeing passport information
     while True:
+        print()
         print("==========================")
         print("Options:")
         print("1) Ask for age")
@@ -174,7 +186,9 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
         print("8) Check your status ")
         print("==========================")
 
+
         choice = input("Choose 1-8: ")
+        print()
 
         if choice == "1":
             print('You: "What is your age?"')
@@ -231,6 +245,7 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
 
 
 def day_summary(day, approved_humans, denied_humans, approved_aliens, denied_aliens):
+    print()
     print("===============================")
     print("===============================")
     print("DAY SUMMARY:", day, "DECEMBER")
@@ -241,6 +256,7 @@ def day_summary(day, approved_humans, denied_humans, approved_aliens, denied_ali
     print("Aliens denied:", denied_aliens)
     print("===============================")
     print("===============================")
+    print()
 
 
 intro() #calling intro
@@ -257,12 +273,13 @@ state = {
 passenger_index = 0
 
 for day in days:
+    print()
     print("======================")
     print("======================")
     print("DAY:", day, "DECEMBER")
     print("======================")
     print("======================")
-
+    print()
     print("Energy:", state["energy"])
     print("Budget:", state["budget"])
     print("Reputation:", state["reputation"], reputation_emoji(state["reputation"]))

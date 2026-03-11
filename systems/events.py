@@ -150,6 +150,7 @@ def fire_in_the_hole(state):
         if donations < 500:
             print("Nobody really cared about the funding you created, I guess all that crying wasn't enough")
             state["reputation"] -= 25
+            state["sustainability"] -= 20
     else:
         print("The fire has been controlled, no need for crying on TV.")
         state["budget"] -= 500
