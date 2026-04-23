@@ -1,11 +1,15 @@
 import mysql.connector
 import random
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 connection = mysql.connector.connect(host="127.0.0.1",
             port=3306,
             database="flight_game",
             user="root",
-            password='y""o32',
+            password= os.getenv("DB_PASSWORD"),
             autocommit=True)
 cursor = connection.cursor(dictionary=True)
 
