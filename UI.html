@@ -2,10 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
 
 </head>
 <body>
+<div id="game-files">
+    <section id="menu-screen">
+        <h1>ANOMALY ANONYMOUS</h1>
+        <button id="start-button">START</button>
+        <button id="tutorial-button">TUTORIAL</button>
+    </section>
+
+    <section id="tutorial">
+        <h2>maybe we add a popup tab w tutorial, instead of reloading whole page</h2>
+    </section>
+
+    <section id="lore-screen">
+        <h2>LORE</h2>
+        <p id="intro-lore"></p>
+        <button id="continue-button"></button>
+    </section>
+
+    <section id="day-screen">
+        <h2 id="day-info">DAY: DATE/DEC</h2>
+        <p id="player-status"></p>
+        <button id="day-continue-button"></button>
+    </section>
+
+    <section id="gameplay-screen">
+        <header id="gameplay-header">
+            <h1 id="game-title">ANOMALY ANONYMOUS></h1>
+        </header>
+
+        <main id="game-board">
+            <section id="passport-section">
+                <div id="passport-container">
+                    <h2>Passport</h2>
+                <div id="passport-preview">
+                    <p id="passport-surname">Surname: </p>
+                    <p id="passport-given-name">Given name: </p>
+                    <p id="passport-nationality">Nationality: </p>
+                    <p id="passport-birth-date">Date of birth: </p>
+                    <p id="passport-sex">Sex</p>
+                    <p id="passport-place-birth">Place of birth: </p>
+                    <p id="passport-number">Passport No: </p>
+                    <p id="passport-country">Issuing Country: </p>
+                    <p id="passport-expiry">Date of expiry: </p>
+
+                    <button id="passport-zoom-button">ZOOM</button>
+                </div>
+                </div>
+            </section>
+
+    <section id="ticket-section">
+        <div id="ticket-container">
+            <h2>TICKET></h2>
+
+            <p id="ticket-departure">Departure Airport: </p>
+            <p id="ticket-arrival">Arrival Airport: </p>
+            <p id="ticket-flight-date">Flight Date: </p>
+            <p id="ticket-flight-time">Flight Time: </p>
+            <p id="ticket-seat">Seat: </p>
+
+            <button id="ticket-zoom-button"></button>
+        </div>
+    </section>
+    <section id="character-section">
+        <div id="character-container">
+            <img id="character" src="" alt="character-passenger">
+            <button id="character-peek-button">PEEK</button>
+        </div>
+    </section>
+
+    <section id="description-section">
+        <div id="desc-container">
+            <h2>CHARACTER DESCRIPTION</h2>
+            <p id="character-description-text">CHARACTER DESCRIPTION</p>
+        </div>
+    </section>
+    <section id="computer-section">
+        <div id="computer-container">
+            <div id="tutorial-container">
+                <button id="computer-tutorial-button">TUTORIAL</button>
+            </div>
+        <div id="status-container">
+            <h2>STATUS</h2>
+            <p id="energy">ENERGY: </p>
+            <p id="budget-text">BUDGET: </p>
+            <p id="sustainability-text">SUSTAINABILITY: </p>
+            <button id="status-zoom-button">ZOOM</button>
+        </div>
+        </div>
+    </section>
+    <section id="desk-section">
+        <div id="desk-container">
+            <div id="decision-buttons">
+                <button id="accept-button">ACCEPT</button>
+                <button id="deny-button">DENY</button>
+
+            </div>
+            <div id="interaction-buttons">
+                <button id="ask-more-button">ASK MORE</button>
+                <button id="ask-age-button">ASK AGE</button>
+                <button id="ask-ticket-button">ASK TICKET</button>
+                <button id="boost-button">CHECK BOOST</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="daily-event">DAILY EVENT</section>
+            <button id="event-option-1">OPTION 1</button>
+            <button id="event-option-2">OPTION 2</button>
+
+        </main>
+    </section>
+
+</div>
 
 </body>
 </html>
