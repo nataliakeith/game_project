@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+    <script src="UI.js" defer></script>
 
 </head>
 <body>
@@ -14,14 +15,15 @@
         <button id="tutorial-button">TUTORIAL</button>
     </section>
 
-    <section id="tutorial">
-        <h2>maybe we add a popup tab w tutorial, instead of reloading whole page</h2>
+    <section id="tutorial" style="display: none;">
+        <p id="tutorial-text"></p>
+        <button id="back-button">BACK</button>
     </section>
 
-    <section id="lore-screen">
+    <section id="lore-screen" style="display: none;">
         <h2>LORE</h2>
         <p id="intro-lore"></p>
-        <button id="continue-button"></button>
+        <button id="continue-button">CONTINUE</button>
     </section>
 
     <section id="day-screen">
@@ -30,7 +32,7 @@
         <button id="day-continue-button"></button>
     </section>
 
-    <section id="gameplay-screen">
+    <section id="gameplay-screen" style="display: none;">
         <header id="gameplay-header">
             <h1 id="game-title">ANOMALY ANONYMOUS></h1>
         </header>
@@ -98,7 +100,7 @@
     <section id="desk-section">
         <div id="desk-container">
             <div id="decision-buttons">
-                <button id="accept-button">ACCEPT</button>
+                <button id="accept-button">ACCEPT</button> <!--one deny or accept is clicked stamp goes on face of character-->
                 <button id="deny-button">DENY</button>
 
             </div>
@@ -114,8 +116,18 @@
     <section id="daily-event">DAILY EVENT</section>
             <button id="event-option-1">OPTION 1</button>
             <button id="event-option-2">OPTION 2</button>
+            <button id="event-option-3"></button>
+            <p id="event-response-text">event response</p>
 
         </main>
+    </section>
+
+    <section id="day-summary">
+        <p id="humans-approved">Humans approved: </p>
+        <p id="humans-denied">Humans denied: </p>
+        <p id="aliens-approved">Aliens approved: </p>
+        <p id="aliens-denied">Aliens denied: </p>
+        <button id="next-day-button">Next day</button>
     </section>
 
 </div>

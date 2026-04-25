@@ -47,20 +47,19 @@ days = ["01", "03", "05", "06", "09", "12", "15"]
 
 #intro that player gets
 def intro():
-        print("==========================================================================================")
-        print("Strange and disturbing events have been occurring all around the globe.")
-        print("After months of investigation, Earth Defense Intelligence Bureau have discovered the truth:")
-        print("aliens have infiltrated Earth, disguising themselves as humans.")
-        print()
-        print("You have been assigned to airport border control to investigate these suspected infiltrators.")
-        print("Your mission is to identify the impostors before they enter the country.")
-        print("Be careful. They look like us.")
-        print("They behave like us.")
-        print("But they are not one of us.")
-        print("Stop them before it's too late — the fate of Earth depends on you.")
-        print("==========================================================================================")
+        return {
+        "lore" : ["Strange and disturbing events have been occurring all around the globe.",
+        "After months of investigation, Earth Defense Intelligence Bureau have discovered the truth:",
+        "aliens have infiltrated Earth, disguising themselves as humans.",
+        "You have been assigned to airport border control to investigate these suspected infiltrators.",
+        "Your mission is to identify the impostors before they enter the country.",
+        "Be careful. They look like us.",
+        "They behave like us.",
+        "But they are not one of us.",
+        "Stop them before it's too late — the fate of Earth depends on you.",
+        ] }
 
-        input("Press Enter to start...")
+        #("Press Enter to start...")
 
 #this part I had to import for filling passport table information, passport number, issuing country and expiration date
 
@@ -99,21 +98,18 @@ for row in passports: #humans passport has k=2 so 2 uppercase letter and 6 digit
 connection.commit()
 
 def tutorial(): #this function is for game tutorial.
-    print()
-    print("=====How to identify anomalies=====")
-    print()
-    print("**Every alien will have one or more odd information that gives you clues about their true species**")
-    print()
-    print("1. Passport expiration date: Humans always have expiration date between 1 and 10 years.")
-    print("2. Passport number format: Humans passports have 2 uppercase letters and 6 digits.")
-    print("3. Age: Some passengers might have unmatching age to birth date, that indicates a anomaly.")
-    print("4. Boosts: Boosts are given by aliens with a good heart, they reveal surprise factor which give you further information on the passenger true species.")
-    print("*Some of these creatures might fool you, choose wisely.")
-    print("5. False documents: Check for any uncommon typing in the documents the passenger presents to you, whether is ticket or passport.")
-    print("6. Description: Reading the description of the passenger might give you clues about who they are.")
-    print()
-    print("**Be aware that aliens presence and events affects airport sustainability, energy, reputation and budget, if too many aliens pass, you lose**")
-    print()
+    return {
+    "tutorial": ["=====How to identify anomalies=====",
+    "**Every alien will have one or more odd information that gives you clues about their true species**",
+    "1. Passport expiration date: Humans always have expiration date between 1 and 10 years.",
+    "2. Passport number format: Humans passports have 2 uppercase letters and 6 digits.",
+    "3. Age: Some passengers might have unmatching age to birth date, that indicates a anomaly.",
+    "4. Boosts: Boosts are given by aliens with a good heart, they reveal surprise factor which give you further information on the passenger true species.",
+    "*Some of these creatures might fool you, choose wisely.",
+    "5. False documents: Check for any uncommon typing in the documents the passenger presents to you, whether is ticket or passport.",
+    "6. Description: Reading the description of the passenger might give you clues about who they are.",
+    "**Be aware that aliens presence and events affects airport sustainability, energy, reputation and budget, if too many aliens pass, you lose**",
+    ]}
 #function to set maximum and minimum values to status
 def max_state(state):
     if state["energy"] > 100:
@@ -144,6 +140,12 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
     cursor.execute("select true_species from passenger where id=%s;", (passenger_id,))
     passenger_true_species = cursor.fetchone()["true_species"]
 
+    description_data = {
+        "header": "PASSENGER APPROACHING...",
+        "description:": character["description"]
+    }
+
+
     print("----------------------------------------")
     print("PASSENGER APPROACHING...")
     print("Description:", character["description"])
@@ -162,17 +164,19 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
         (passenger_id,)
     )
     passport = cursor.fetchone()
-    print()
-    print("====PASSPORT====")
-    print("Surname:", passport["last_name"])
-    print("Given names:", passport["first_name"])
-    print("Nationality:", passport["nationality"])
-    print("Date of birth:", passport["birth_date"])
-    print("Sex:", passport["sex"])
-    print("Place of birth:", passport["place_birth"])
-    print("Passport Nº:", passport["passport_number"])
-    print("Issuing Country:", passport["issuing_country"])
-    print("Date of expiry:", passport["expiration_date"])
+
+
+    passport_data = {
+    "surname": passport["last_name"],
+    "given_names": passport["first_name"],
+    "nationality": passport["nationality"],
+    "date_of_birth": passport["birth_date"],
+    "sex": passport["sex"],
+    "place_of_birth": passport["place_birth"],
+    "passport_number": passport["passport_number"],
+    "issuing_country": passport["issuing_country"],
+    "date_of_expiry": passport["expiration_date"]
+    }
 
 
 #Interactions available after seeing passport information
@@ -195,8 +199,14 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
         print()
 
         if choice == "1":
-            print('You: "What is your age?"')
-            print("Passenger says:", passport["age"])
+            age_data = {
+                "type": "age",
+                "question": 'You: "What is your age?"',
+                "answer": passport["age"]
+            }
+            print(age_data["question"])
+            print("Passenger says:", age_data["answer"])
+
 
         elif choice == "2":
 
@@ -214,6 +224,14 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
                 print("Flight time:", ticket["flight_time"])
                 print("Seat:", ticket["seat"])
 
+                ticket_data = {
+                    "departure_airport":  ticket["departure_airport"],
+                    "arrival_airport": ticket["arrival_airport"],
+                    "flight_date": ticket["flight_date"],
+                    "flight_time": ticket["flight_time"],
+                    "seat": ticket["seat"]
+                }
+
             
 
         elif choice == "3":
@@ -224,6 +242,10 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
 
             else:
                 print("You have no boosts.")
+
+            boost = {
+                "boost": character["surprise_factor"]
+            }
 
         elif choice == "4":
             return ("none", passenger_true_species)
@@ -244,6 +266,14 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
             print("Reputation:", state["reputation"], reputation_emoji(state["reputation"]))
             print("Sustainability:", state["sustainability"])
             print()
+
+            status = {
+                "energy": state["energy"],
+                "budget": state["budget"],
+                "reputation": state["reputation"],
+                "reputation_emoji": reputation_emoji(state["reputation"]),
+                "sustainability": state["sustainability"]
+            }
         else:
             print("Invalid. Type 1-8.")
 
@@ -261,9 +291,18 @@ def day_summary(day, approved_humans, denied_humans, approved_aliens, denied_ali
     print("===============================")
     print("===============================")
     print()
+    day_sum = {
+        "day_summary": day,
+        "humans_approved": approved_humans,
+        "humans_denied": denied_humans,
+        "aliens_passed": approved_aliens,
+        "aliens_denied": denied_aliens,
 
 
-intro() #calling intro
+    }
+
+
+#intro() #calling intro
 
 state = {
     "energy": 100,
@@ -276,125 +315,134 @@ state = {
 
 passenger_index = 0
 
-for day in days:
-    print()
-    print("======================")
-    print("======================")
-    print("DAY:", day, "DECEMBER")
-    print("======================")
-    print("======================")
-    print()
-    print("Energy:", state["energy"])
-    print("Budget:", state["budget"])
-    print("Reputation:", state["reputation"], reputation_emoji(state["reputation"]))
-    print("Sustainability:", state["sustainability"])
-    print()
+def day_intro(day, state):
+        return {
+            "day": f"{day} DECEMBER",
+            "energy": state["energy"],
+            "budget": state["budget"],
+            "reputation": state["reputation"],
+            "reputation_emoji": reputation_emoji(state["reputation"]),
+            "sustainability": state["sustainability"]
+        }
 
     # state["inspection_blocked"] = False                              #IF WE GET THE BLOCK INSPECTION EVENT.RESETS BLOCKED INSPECTION JUST IN CASE
-    
 
     # from systems.events import daily_event                           #PER DAY WE GET A DAILY EVENT
 
     # state = daily_event(state)                                           
+ #generating 3 passengers per day, out of the 21 previously generated passengers.
+if __name__ == '__main__':
+    intro()
+    passenger_index = 0
+    for day in days:
+        print()
+        print("======================")
+        print("======================")
+        print("DAY:", day, "DECEMBER")
+        print("======================")
+        print("======================")
+        print()
+        print("Energy:", state["energy"])
+        print("Budget:", state["budget"])
+        print("Reputation:", state["reputation"], reputation_emoji(state["reputation"]))
+        print("Sustainability:", state["sustainability"])
+        print()
 
+        day_intro_data = day_intro(day, state)
 
-    #generating 3 passengers per day, out of the 21 previously generated passengers.
-    approved_humans = 0
-    denied_humans = 0
-    approved_aliens = 0
-    denied_aliens = 0
+        approved_humans = 0
+        denied_humans = 0
+        approved_aliens = 0
+        denied_aliens = 0
 
-    passengers_of_day = passengers[passenger_index:passenger_index + 3]
-    passenger_index += 3
+        passengers_of_day = passengers[passenger_index:passenger_index + 3]
+        passenger_index += 3
 
-    for passenger in passengers_of_day:
+        for passenger in passengers_of_day:
 
-        if passenger["true_species"] == 0 and check_backstabber():       # I added this to call the backstabber alien functions
-            state, day_knocked_out = backstab(state)
+            if passenger["true_species"] == 0 and check_backstabber():
+                state, day_knocked_out = backstab(state)
 
-            if day_knocked_out:
-                break
-        
-        if passenger["true_species"] == 1:
-            ticket_range = regular_ticket_dates[day]
-            ticket_table = "regular_ticket"
-        else:
-            ticket_range = false_ticket_dates[day]
-            ticket_table = "false_ticket"
+                if day_knocked_out:
+                    break
 
-        ticket_id = random.randint(ticket_range[0], ticket_range[1])
-        decision, true_species = generate_cards(cursor, passenger["id"], ticket_table, ticket_id,state)
-
-        if decision == "approve":
-            cursor.execute(
-                "UPDATE session SET allowed_in = 1 WHERE passenger_id = %s",(passenger["id"],)  #TO UPDATE SESSION!Energy depends on number of aliens in the port
-            )
-
-        elif decision == "deny":
-            cursor.execute(
-                "UPDATE session SET allowed_in = 0 WHERE passenger_id = %s",(passenger["id"],)
-            )
-
-        connection.commit()
-
-        
-        if decision == "approve":
-            if true_species == 1:
-                approved_humans += 1
+            if passenger["true_species"] == 1:
+                ticket_range = regular_ticket_dates[day]
+                ticket_table = "regular_ticket"
             else:
-                approved_aliens += 1
+                ticket_range = false_ticket_dates[day]
+                ticket_table = "false_ticket"
 
-        elif decision == "deny":
-            if true_species == 1:
-                denied_humans += 1
-            else:
-                denied_aliens += 1
+            ticket_id = random.randint(ticket_range[0], ticket_range[1])
+            decision, true_species = generate_cards(cursor, passenger["id"], ticket_table, ticket_id, state)
 
-    day_summary(day, approved_humans, denied_humans, approved_aliens, denied_aliens)
+            if decision == "approve":
+                cursor.execute(
+                    "UPDATE session SET allowed_in = 1 WHERE passenger_id = %s",
+                    (passenger["id"],)
+                )
 
-    state["inspection_blocked"] = False     #IF WE GET THE BLOCK INSPECTION EVENT.RESETS BLOCKED INSPECTION JUST IN CASE
+            elif decision == "deny":
+                cursor.execute(
+                    "UPDATE session SET allowed_in = 0 WHERE passenger_id = %s",
+                    (passenger["id"],)
+                )
 
-    from systems.events import daily_event #PER DAY WE GET A DAILY EVENT
+            connection.commit()
+
+            if decision == "approve":
+                if true_species == 1:
+                    approved_humans += 1
+                else:
+                    approved_aliens += 1
+
+            elif decision == "deny":
+                if true_species == 1:
+                    denied_humans += 1
+                else:
+                    denied_aliens += 1
+
+        day_summary(day, approved_humans, denied_humans, approved_aliens, denied_aliens)
+
+        state["inspection_blocked"] = False
+
+        from systems.events import daily_event
+
+        state = daily_event(state)
+
+        state = max_state(state)
+
+        alien_count = count_aliens(connection)
+
+        state["energy"] = update_energy(state["energy"], alien_count)
+        state["sustainability"] = update_sustainability(state["sustainability"], alien_count)
+        state["reputation"] = update_reputation(state["reputation"], alien_count, state["sustainability"])
+        state["budget"] = update_budget(state["budget"], state["reputation"], state["sustainability"])
+
+        state = max_state(state)
+
+        if state["energy"] <= 0:
+            print("Out of energy.The airport shut down and the aliens took over.")
+            print("GAME OVER")
+            break
+
+        if state["reputation"] <= 0:
+            print("People don't trust the airport anymore.The government has cut funding and the airport shut down.")
+            print("GAME OVER")
+            break
+
+        if state["sustainability"] < 30 and state["budget"] <= 0:
+            print("Airport sustainability has dropped below acceptable levels.The government has abandoned the airport.")
+            print("GAME OVER")
+            break
+
+        if state["surprise_boost_days"] > 0:
+            state["surprise_boost_days"] -= 1
 
 
-    state = daily_event(state)
-    state = max_state(state)
 
-
-    alien_count = count_aliens(connection)
-
-    state["energy"] = update_energy(state["energy"],alien_count)
-
-    state["sustainability"] = update_sustainability(state["sustainability"],alien_count)       # Applies updates everyday
-
-    state["reputation"] = update_reputation(state["reputation"],alien_count,state["sustainability"])
-
-    state["budget"] = update_budget(state["budget"],state["reputation"],state["sustainability"])
-
-    state = max_state(state)
-
-    if state["energy"] <= 0:
-        print("Out of energy.The airport shut down and the aliens took over.")
-        print("GAME OVER")
-        break
-    
-    if state["reputation"] <= 0:
-        print("People don't trust the airport anymore.The government has cut funding and the airport shut down.") #GAME OVER CONDITIONS!!!!
-        print("GAME OVER")
-        break
-
-    if state["sustainability"] < 30 and state["budget"] <= 0:
-        print("Airport sustainability has dropped below acceptable levels.The government has abandoned the airport.")
-        print("GAME OVER")
-        break
-
-    if state["surprise_boost_days"] > 0:                  #COUNTS DOWN BOOST DAYS
-        state["surprise_boost_days"] -= 1
-
-
-
-cursor.close()
-connection.close()
+    cursor.close()
+    connection.close()
 
 
 
