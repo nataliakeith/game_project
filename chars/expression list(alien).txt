@@ -1,0 +1,10 @@
+Default     def
+Happy       happy
+Sad         sad
+Angry       mad
+Alien       alien
+Alien2      alien 2
+
+Add
+Passport    passport
+Scare       scare
