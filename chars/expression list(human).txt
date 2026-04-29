@@ -1,0 +1,8 @@
+Default     def
+Happy       happy
+Sad         sad
+Angry       mad
+Surprised   sur
+
+Add
+Passport
