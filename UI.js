@@ -224,3 +224,4 @@ document.querySelector('#use-boost-button').addEventListener('click', async func
     }
 });
 
+

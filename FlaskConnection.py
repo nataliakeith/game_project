@@ -16,7 +16,6 @@ CORS(app)
 @app.route('/intro')
 def intro_route():
     return jsonify(intro())
-
 @app.route('/tutorial')
 def tutorial_route():
     return jsonify(tutorial())
@@ -54,7 +53,6 @@ def current_passenger_route():
 @app.route('/use-boost')
 def use_boost_route():
     return jsonify(use_boost())
-
 
 
 if __name__ == '__main__':

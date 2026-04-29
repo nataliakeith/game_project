@@ -67,7 +67,6 @@ import string
 from datetime import date, timedelta
 
 
-
 #fetch airport names from country
 cursor.execute("select name from country;")
 countries = [row["name"] for row in cursor.fetchall()]
@@ -445,8 +444,6 @@ def get_current_passenger_full_data():
     }
 
 
-
-
 def handle_decision(decision):
     global approved_humans, denied_humans, approved_aliens, denied_aliens
     global passenger_index, passengers_checked_today, current_game_data, current_day_index, state
@@ -510,6 +507,7 @@ def use_boost():
         return {
             "used": False
         }
+
 
 
 if __name__ == '__main__':
