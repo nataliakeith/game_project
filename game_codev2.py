@@ -66,6 +66,8 @@ def intro():
 import string
 from datetime import date, timedelta
 
+
+
 #fetch airport names from country
 cursor.execute("select name from country;")
 countries = [row["name"] for row in cursor.fetchall()]
@@ -217,6 +219,16 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
                 cursor.execute(f"select departure_airport, arrival_airport, flight_date, flight_time, seat from {ticket_table} where ticket_id=%s;",
                            (ticket_id,))
                 ticket = cursor.fetchone()
+
+                global current_game_data
+
+                current_game_data = {
+                    "departure_airport": ticket["departure_airport"],
+                    "arrival_airport": ticket["arrival_airport"],
+                    "flight_date": str(ticket["flight_date"]),
+                    "flight_time": str(ticket["flight_time"]),
+                    "seat": ticket["seat"]
+                }
                 print("====TICKET====")
                 print("Departure airport:", ticket["departure_airport"])
                 print("Arrival airport:", ticket["arrival_airport"])
@@ -224,13 +236,6 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
                 print("Flight time:", ticket["flight_time"])
                 print("Seat:", ticket["seat"])
 
-                ticket_data = {
-                    "departure_airport":  ticket["departure_airport"],
-                    "arrival_airport": ticket["arrival_airport"],
-                    "flight_date": ticket["flight_date"],
-                    "flight_time": ticket["flight_time"],
-                    "seat": ticket["seat"]
-                }
 
             
 
@@ -239,6 +244,7 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
             if state["surprise_boost_days"] > 0:
                 print("***BOOST RESULT***")
                 print("Surprise factor:", character["surprise_factor"])
+
 
             else:
                 print("You have no boosts.")
@@ -267,13 +273,7 @@ def generate_cards(cursor, passenger_id, ticket_table, ticket_id, state):
             print("Sustainability:", state["sustainability"])
             print()
 
-            status = {
-                "energy": state["energy"],
-                "budget": state["budget"],
-                "reputation": state["reputation"],
-                "reputation_emoji": reputation_emoji(state["reputation"]),
-                "sustainability": state["sustainability"]
-            }
+
         else:
             print("Invalid. Type 1-8.")
 
@@ -303,7 +303,7 @@ def day_summary(day, approved_humans, denied_humans, approved_aliens, denied_ali
 
 
 #intro() #calling intro
-
+#from here down there is functions for flask
 state = {
     "energy": 100,
     "budget": 10000,                                                            #I added this so the game stores our stasts in a dictonary
@@ -314,6 +314,18 @@ state = {
 }
 
 passenger_index = 0
+current_backstabber = {}
+current_game_data = {}
+current_daily_event = {}
+
+current_day_index = 0
+passengers_checked_today = 0
+
+approved_humans = 0
+denied_humans = 0
+approved_aliens = 0
+denied_aliens = 0
+
 
 def day_intro(day, state):
         return {
@@ -331,6 +343,175 @@ def day_intro(day, state):
 
     # state = daily_event(state)                                           
  #generating 3 passengers per day, out of the 21 previously generated passengers.
+def get_current_passenger_passport():
+    passenger = passengers[passenger_index]
+
+    cursor.execute(
+        "SELECT passenger.last_name, passenger.first_name, passenger.nationality, passenger.birth_date, passenger.sex, passenger.place_birth, passport.passport_number, passport.issuing_country, passport.expiration_date "
+        "FROM passenger JOIN passport ON passport.passenger_ID = passenger.id WHERE passenger.id=%s;",
+        (passenger["id"],)
+    )
+
+    passport = cursor.fetchone()
+
+    return {
+        "surname": passport["last_name"],
+        "given_names": passport["first_name"],
+        "nationality": passport["nationality"],
+        "birth_date": str(passport["birth_date"]),
+        "sex": passport["sex"],
+        "place_of_birth": passport["place_birth"],
+        "passport_number": passport["passport_number"],
+        "issuing_country": passport["issuing_country"],
+        "expiration_date": str(passport["expiration_date"])
+    }
+def get_current_passenger_data():
+    global current_game_data
+
+    passenger = passengers[passenger_index]
+    day = days[current_day_index]
+
+    if current_game_data == {}:
+        if passenger["true_species"] == 1:
+            ticket_range = regular_ticket_dates[day]
+            ticket_table = "regular_ticket"
+        else:
+            ticket_range = false_ticket_dates[day]
+            ticket_table = "false_ticket"
+
+        ticket_id = random.randint(ticket_range[0], ticket_range[1])
+
+        cursor.execute(
+            f"select departure_airport, arrival_airport, flight_date, flight_time, seat from {ticket_table} where ticket_id=%s;",
+            (ticket_id,)
+        )
+        ticket = cursor.fetchone()
+
+        current_game_data = {
+            "departure_airport": ticket["departure_airport"],
+            "arrival_airport": ticket["arrival_airport"],
+            "flight_date": str(ticket["flight_date"]),
+            "flight_time": str(ticket["flight_time"]),
+            "seat": ticket["seat"]
+        }
+
+    cursor.execute(
+        "select description, surprise_factor, age from passenger where id=%s;",
+        (passenger["id"],)
+    )
+    character = cursor.fetchone()
+
+    return {
+        "header": "PASSENGER APPROACHING...",
+        "description": character["description"]
+    }
+
+def get_current_status():
+    return {
+        "energy": state["energy"],
+        "budget": state["budget"],
+        "reputation": state["reputation"],
+        "reputation_emoji": reputation_emoji(state["reputation"]),
+        "sustainability": state["sustainability"]
+    }
+def get_current_ticket_data():
+        return current_game_data
+def get_current_passenger_age():
+    passenger = passengers[passenger_index]
+
+    cursor.execute(
+        "select age from passenger where id=%s;",
+        (passenger["id"],)
+
+    )
+    result = cursor.fetchone()
+
+    return {
+        "question": 'You: "What is your age?"',
+        "answer": result["age"]
+    }
+def get_current_passenger_full_data():
+    if current_day_index >= len(days):
+        return {
+            "game_finished": True,
+            "status": get_current_status()
+        }
+    return {
+        "description": get_current_passenger_data(),
+        "passport": get_current_passenger_passport(),
+        "status": get_current_status(),
+        "ticket": get_current_ticket_data(),
+        "day": days[current_day_index]
+    }
+
+
+
+
+def handle_decision(decision):
+    global approved_humans, denied_humans, approved_aliens, denied_aliens
+    global passenger_index, passengers_checked_today, current_game_data, current_day_index, state
+
+    passenger = passengers[passenger_index]
+    true_species = passenger["true_species"]
+
+    if decision == "approve":
+        cursor.execute(
+            "UPDATE session SET allowed_in = 1 WHERE passenger_id = %s",
+            (passenger["id"],)
+        )
+
+        if true_species == 1:
+            approved_humans += 1
+        else:
+            approved_aliens += 1
+
+    elif decision == "deny":
+        cursor.execute(
+            "UPDATE session SET allowed_in = 0 WHERE passenger_id = %s",
+            (passenger["id"],)
+        )
+
+        if true_species == 1:
+            denied_humans += 1
+        else:
+            denied_aliens += 1
+
+
+    connection.commit()
+
+    passenger_index += 1
+    passengers_checked_today += 1
+    current_game_data = {}
+
+
+
+def get_boost_status():
+    return {
+        "boost_days": state["surprise_boost_days"]
+    }
+def use_boost():
+    passenger = passengers[passenger_index]
+
+    if state["surprise_boost_days"] > 0:
+        cursor.execute(
+            "select surprise_factor from passenger where id=%s;",
+            (passenger["id"],)
+        )
+        result = cursor.fetchone()
+
+        state["surprise_boost_days"] -= 1  # consume boost
+
+        return {
+            "used": True,
+            "surprise_factor": result["surprise_factor"],
+            "remaining": state["surprise_boost_days"]
+        }
+    else:
+        return {
+            "used": False
+        }
+
+
 if __name__ == '__main__':
     intro()
     passenger_index = 0
@@ -374,6 +555,20 @@ if __name__ == '__main__':
                 ticket_table = "false_ticket"
 
             ticket_id = random.randint(ticket_range[0], ticket_range[1])
+            current_game_data["ticket_table"] = ticket_table
+            current_game_data["ticket_id"] = ticket_id
+            cursor.execute(
+                f"select departure_airport, arrival_airport, flight_date, flight_time, seat from {ticket_table} where ticket_id=%s;",
+                (ticket_id,)
+            )
+
+            ticket = cursor.fetchone()
+
+            current_game_data["departure_airport"] = ticket["departure_airport"]
+            current_game_data["arrival_airport"] = ticket["arrival_airport"]
+            current_game_data["flight_date"] = str(ticket["flight_date"])
+            current_game_data["flight_time"] = str(ticket["flight_time"])
+            current_game_data["seat"] = ticket["seat"]
             decision, true_species = generate_cards(cursor, passenger["id"], ticket_table, ticket_id, state)
 
             if decision == "approve":

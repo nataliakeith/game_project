@@ -76,6 +76,44 @@
             <button id="character-peek-button">PEEK</button>
         </div>
     </section>
+    <section id="character-popup" style="display: none;">
+    <div id="character-popup-box">
+        <img id="character-popup-image" src="" alt="character peek view">
+
+        <p id="character-popup-text">Passenger convo</p>
+
+        <p id="popup-age-question"></p>
+        <p id="popup-age-answer"></p>
+
+        <div id="popup-ticket-info">
+            <p id="popup-ticket-departure">Departure Airport: </p>
+            <p id="popup-ticket-arrival">Arrival Airport: </p>
+            <p id="popup-ticket-flight-date">Flight Date: </p>
+            <p id="popup-ticket-flight-time">Flight Time: </p>
+            <p id="popup-ticket-seat">Seat: </p>
+        </div>
+
+        <button id="popup-ask-age-button">ASK AGE</button>
+        <button id="popup-ask-ticket-button">ASK TICKET</button>
+        <button id="close-character-popup">CLOSE</button>
+    </div>
+</section>
+            <section id="backstabber-screen" style="display: none;">
+    <p id="backstabber-text"></p>
+
+    <button id="backstabber-option-1">Hear them out</button>
+    <button id="backstabber-option-2">Something's fishy...</button>
+
+    <div id="backstabber-boost-options" style="display: none;">
+        <button id="backstabber-boost-1">Reveal surprise factors for 3 days</button>
+        <button id="backstabber-boost-2">Restore energy</button>
+        <button id="backstabber-boost-3">Restore reputation</button>
+        <button id="backstabber-boost-4">Boost sustainability</button>
+        <button id="backstabber-boost-5">Receive cash</button>
+    </div>
+
+    <p id="backstabber-result"></p>
+</section>
 
     <section id="description-section">
         <div id="desc-container">
@@ -92,6 +130,7 @@
             <h2>STATUS</h2>
             <p id="energy">ENERGY: </p>
             <p id="budget-text">BUDGET: </p>
+            <p id="reputation-text">REPUTATION: </p>
             <p id="sustainability-text">SUSTAINABILITY: </p>
             <button id="status-zoom-button">ZOOM</button>
         </div>
@@ -109,27 +148,28 @@
                 <button id="ask-age-button">ASK AGE</button>
                 <button id="ask-ticket-button">ASK TICKET</button>
                 <button id="boost-button">CHECK BOOST</button>
+
+                <div id="boost-box" style=" display:none;">
+                    <p id="boost-info"></p>
+                    <button id="use-boost-button">USE BOOST</button>
+                    <p id="boost-result"></p>
+</div>
             </div>
         </div>
     </section>
 
-    <section id="daily-event">DAILY EVENT</section>
-            <button id="event-option-1">OPTION 1</button>
-            <button id="event-option-2">OPTION 2</button>
-            <button id="event-option-3"></button>
-            <p id="event-response-text">event response</p>
+    <section id="daily-event" style="display: none;">DAILY EVENT</section>
+            <button id="event-option-1" style="display: none;">OPTION 1</button>
+            <button id="event-option-2" style="display: none;">OPTION 2</button>
+            <p id="event-response-text"></p>
 
-        </main>
-    </section>
-
-    <section id="day-summary">
+    <section id="day-summary" style="display: none;">
         <p id="humans-approved">Humans approved: </p>
         <p id="humans-denied">Humans denied: </p>
         <p id="aliens-approved">Aliens approved: </p>
         <p id="aliens-denied">Aliens denied: </p>
         <button id="next-day-button">Next day</button>
     </section>
-
 </div>
 
 </body>
