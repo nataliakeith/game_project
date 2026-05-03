@@ -26,16 +26,15 @@
         <button id="continue-button">CONTINUE</button>
     </section>
 
-    <section id="day-screen">
-        <h2 id="day-info">DAY: DATE/DEC</h2>
+    <section id="day-screen" style="display: none;">
         <p id="player-status"></p>
         <button id="day-continue-button"></button>
     </section>
 
     <section id="gameplay-screen" style="display: none;">
         <header id="gameplay-header">
-            <h1 id="game-title">ANOMALY ANONYMOUS></h1>
-        </header>
+            <h1 id="game-title">ANOMALY ANONYMOUS </h1>
+            <h2 id="day-info">DAY: DATE/DEC </h2></header>
 
         <main id="game-board">
             <section id="passport-section">
@@ -57,19 +56,6 @@
                 </div>
             </section>
 
-    <section id="ticket-section">
-        <div id="ticket-container">
-            <h2>TICKET></h2>
-
-            <p id="ticket-departure">Departure Airport: </p>
-            <p id="ticket-arrival">Arrival Airport: </p>
-            <p id="ticket-flight-date">Flight Date: </p>
-            <p id="ticket-flight-time">Flight Time: </p>
-            <p id="ticket-seat">Seat: </p>
-
-            <button id="ticket-zoom-button"></button>
-        </div>
-    </section>
     <section id="character-section">
         <div id="character-container">
             <img id="character" src="" alt="character-passenger">
@@ -97,22 +83,6 @@
         <button id="popup-ask-ticket-button">ASK TICKET</button>
         <button id="close-character-popup">CLOSE</button>
     </div>
-</section>
-            <section id="backstabber-screen" style="display: none;">
-    <p id="backstabber-text"></p>
-
-    <button id="backstabber-option-1">Hear them out</button>
-    <button id="backstabber-option-2">Something's fishy...</button>
-
-    <div id="backstabber-boost-options" style="display: none;">
-        <button id="backstabber-boost-1">Reveal surprise factors for 3 days</button>
-        <button id="backstabber-boost-2">Restore energy</button>
-        <button id="backstabber-boost-3">Restore reputation</button>
-        <button id="backstabber-boost-4">Boost sustainability</button>
-        <button id="backstabber-boost-5">Receive cash</button>
-    </div>
-
-    <p id="backstabber-result"></p>
 </section>
 
     <section id="description-section">
@@ -144,9 +114,6 @@
 
             </div>
             <div id="interaction-buttons">
-                <button id="ask-more-button">ASK MORE</button>
-                <button id="ask-age-button">ASK AGE</button>
-                <button id="ask-ticket-button">ASK TICKET</button>
                 <button id="boost-button">CHECK BOOST</button>
 
                 <div id="boost-box" style=" display:none;">
@@ -157,11 +124,29 @@
             </div>
         </div>
     </section>
+    </main>
+    </section>
 
-    <section id="daily-event" style="display: none;">DAILY EVENT</section>
+<section id="backstabber-screen" style="display: none;">
+    <p id="backstabber-text"></p>
+
+    <button id="backstabber-option-1">Hear them out</button>
+    <button id="backstabber-option-2">Something's fishy...</button>
+
+    <div id="backstabber-boost-options" style="display: none;">
+        <button id="backstabber-boost-1">Reveal surprise factors for 3 days</button>
+        <button id="backstabber-boost-2">Restore energy</button>
+        <button id="backstabber-boost-3">Restore reputation</button>
+        <button id="backstabber-boost-4">Boost sustainability</button>
+        <button id="backstabber-boost-5">Receive cash</button>
+    </div>
+    <p id="backstabber-result"></p>
+</section>
+<section id="daily-event" style="display: none;">DAILY EVENT</section>
             <button id="event-option-1" style="display: none;">OPTION 1</button>
             <button id="event-option-2" style="display: none;">OPTION 2</button>
             <p id="event-response-text"></p>
+            <button id ="event-continue-button" style="display: none;">CONTINUE</button>
 
     <section id="day-summary" style="display: none;">
         <p id="humans-approved">Humans approved: </p>
@@ -169,7 +154,12 @@
         <p id="aliens-approved">Aliens approved: </p>
         <p id="aliens-denied">Aliens denied: </p>
         <button id="next-day-button">Next day</button>
+        <button id="continue"></button>
     </section>
-        </div>
+    <section id="ending-screen" style="display: none;">
+        <h1 id="ending-title"></h1>
+        <p id="ending-message"></p>
+        <p id="ending-results"></p>
+</section></div>
 </body>
 </html>
