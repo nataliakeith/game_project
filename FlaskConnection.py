@@ -8,7 +8,7 @@ from game_codev2 import (intro, tutorial,
                          get_current_ticket_data,
                          handle_decision,
                          get_boost_status,
-                         use_boost, get_current_passenger_full_data)
+                         use_boost, get_current_passenger_full_data, apply_daily_event_choice, apply_backstabber_choice)
 
 app = Flask(__name__)
 CORS(app)
@@ -53,6 +53,16 @@ def current_passenger_route():
 @app.route('/use-boost')
 def use_boost_route():
     return jsonify(use_boost())
+@app.route('/daily-event/<choice>')
+def daily_event_choice_route(choice):
+    return jsonify(apply_daily_event_choice(choice))
+@app.route('/backstabber/<choice>')
+def backstabber_choice_route(choice):
+    return jsonify(apply_backstabber_choice(choice))
+
+@app.route('/backstabber/<choice>/<boost_choice>')
+def backstabber_boost_choice_route(choice, boost_choice):
+    return jsonify(apply_backstabber_choice(choice, boost_choice))
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 def update_energy(current_energy, alien_count):
     
-    normal_usage = 15
-    alien_strain = alien_count * 4
+    normal_usage = 8
+    alien_strain = alien_count * 6
 
     total_usage = normal_usage + alien_strain
 
@@ -11,3 +11,4 @@ def update_energy(current_energy, alien_count):
         new_energy = 0
 
     return new_energy
+
