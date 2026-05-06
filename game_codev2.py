@@ -78,15 +78,17 @@ regular_ticket_dates = {"01": (1, 11), "03": (12, 23), "05": (24, 36), "06": (37
 false_ticket_dates = {"01": (1, 14), "03": (15, 34), "05": (49, 63), "06": (64, 77), "09": (78, 88), "12": (89, 99), "15": (35, 48)}
 days = ["01", "03", "05", "06", "09", "12", "15"]
 
+#Game stores our stats in a dictonary
 state = {
     "energy": 100,
-    "budget": 10000,                                                            #Game stores our stats in a dictonary
+    "budget": 10000,
     "reputation": 100,
     "sustainability": 100,
-    "surprise_boost_days": 0,                                                    #TO COUNT DAYS OF BOOST LEFT!
-    "inspection_blocked":False                                                   #FOR POTENTIAL TO BLOCK INSPECTION
+    "surprise_boost_days": 0,    #TO COUNT DAYS OF BOOST LEFT!
+    "inspection_blocked":False   #FOR POTENTIAL TO BLOCK INSPECTION
 }
 
+#Below are variables were created to be later used
 passenger_index = 0
 total_approved_aliens = 0
 current_backstabber = {}
@@ -101,7 +103,11 @@ denied_humans = 0
 approved_aliens = 0
 denied_aliens = 0
 
-#function to set maximum and minimum values to status
+##From here below the game was "packed" in functions in order to be brought to js through flask route
+# and to avoid rewriting the code in JS, and using JS just for interactions buttons that display python code
+##Also the functions were rearranged so they make more sense and once the game is finished we will add notes to explain the code, as I'm doing in these first functions
+
+#function to set maximum and minimum values to status so it never goes above or below the limits
 def max_state(state):
     if state["energy"] > 100:
         state["energy"] = 100
@@ -123,6 +129,7 @@ def max_state(state):
 
     return state
 
+#fucntion to return the player current status, which is a few blocks above in a dictionary.
 def get_current_status():
     return {
         "energy": state["energy"],
@@ -132,9 +139,11 @@ def get_current_status():
         "sustainability": state["sustainability"]
     }
 
+#function that return ticket in dictionary
 def get_current_ticket_data():
     return current_game_data
 
+#function
 def get_boost_status():
     return {
         "boost_days": state["surprise_boost_days"]
@@ -243,6 +252,8 @@ def get_current_passenger_full_data():
         }
     return {
         "is_backstabber": False,
+        "passenger_id": passenger["id"],
+        "species": "alien" if passenger["true_species"] == 0 else "human",
         "description": get_current_passenger_data(),
         "passport": get_current_passenger_passport(),
         "status": get_current_status(),
@@ -314,7 +325,7 @@ def continue_after_passenger():
             state["sustainability"]
         )
 
-        # decision effects
+
         state["reputation"] += human_count * 2
         state["reputation"] -= wrong_denials * 10
         state["budget"] += human_count * 200
@@ -327,7 +338,7 @@ def continue_after_passenger():
         summary_approved_aliens = approved_aliens
         summary_denied_aliens = denied_aliens
 
-        # daily event after day 3 and day 6 only
+
         if (current_day_index + 1) % 3 == 0 and current_day_index != len(days) - 1:
             current_daily_event = create_daily_event()
 
@@ -350,7 +361,7 @@ def continue_after_passenger():
         approved_aliens = 0
         denied_aliens = 0
 
-        # game ends only after all 7 days / 21 passengers
+
         if passenger_index >= len(passengers):
             return {
                 "game_finished": True,
@@ -508,6 +519,14 @@ def apply_daily_event_choice(choice):
 
     current_day_index += 1
     current_daily_event = None
+
+    if current_day_index >= len(days):
+        return {
+            "game_finished": True,
+            "ending": get_ending(),
+            "message": message,
+            "status": get_current_status()
+        }
 
     approved_humans = 0
     denied_humans = 0

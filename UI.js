@@ -6,7 +6,7 @@ document.querySelector('#start-button').addEventListener('click', async function
 
     document.querySelector('#intro-lore').innerText = data.lore.join('\n');
     document.querySelector('#menu-screen').style.display = 'none';
-    document.querySelector('#lore-screen').style.display = 'block';
+    document.querySelector('#lore-screen').style.display = 'flex';
 });
 
 document.querySelector('#tutorial-button').addEventListener('click', async function() {
@@ -15,15 +15,19 @@ document.querySelector('#tutorial-button').addEventListener('click', async funct
 
     document.querySelector('#tutorial-text').innerText = data.tutorial.join('\n');
     document.querySelector('#menu-screen').style.display = 'none';
-    document.querySelector('#tutorial').style.display = 'block';
+    document.querySelector('#tutorial').style.display = 'flex';
 
 });
 
 document.querySelector('#back-button').addEventListener('click', async function() {
     document.querySelector('#tutorial').style.display = 'none';
-    document.querySelector('#menu-screen').style.display = 'block';
-});
 
+    if (document.querySelector('#gameplay-screen').style.display === 'block') {
+        document.querySelector('#gameplay-screen').style.display = 'block';
+    } else {
+        document.querySelector('#menu-screen').style.display = 'flex';
+    }
+});
 document.querySelector('#continue-button').addEventListener('click', async function() {
     document.querySelector('#lore-screen').style.display = 'none';
     document.querySelector('#gameplay-screen').style.display = 'block';
@@ -38,8 +42,7 @@ document.querySelector('#computer-tutorial-button').addEventListener('click', as
     const response = await fetch('http://127.0.0.1:5000/tutorial');
     const data = await response.json();
 
-    document.querySelector('#tutorial-text').innerText = data.tutorial.join('\n');
-    document.querySelector('#tutorial').style.display = 'block';
+    alert(data.tutorial.join('\n'));
 });
 
 document.querySelector('#passport-zoom-button').addEventListener('click', function() {
@@ -62,19 +65,20 @@ document.querySelector('#popup-ask-age-button').addEventListener('click', async 
     const response = await fetch('http://127.0.0.1:5000/age');
     const data = await response.json();
 
-    document.querySelector('#popup-age-question').innerText = data.question;
-    document.querySelector('#popup-age-answer').innerText = "Passenger says: " + data.answer;
+    document.querySelector('#character-popup-text').innerText =
+    data.question + "\nPassenger says: " + data.answer;
 });
 
 document.querySelector('#popup-ask-ticket-button').addEventListener('click', async function() {
     const response = await fetch('http://127.0.0.1:5000/ticket');
     const ticket = await response.json();
 
-    document.querySelector('#popup-ticket-departure').innerText = "Departure Airport: " + ticket.departure_airport;
-    document.querySelector('#popup-ticket-arrival').innerText = "Arrival Airport: " + ticket.arrival_airport;
-    document.querySelector('#popup-ticket-flight-date').innerText = "Flight Date: " + ticket.flight_date;
-    document.querySelector('#popup-ticket-flight-time').innerText = "Flight Time: " + ticket.flight_time;
-    document.querySelector('#popup-ticket-seat').innerText = "Seat: " + ticket.seat;
+    document.querySelector('#character-popup-text').innerText =
+    "Departure Airport: " + ticket.departure_airport + "\n" +
+    "Arrival Airport: " + ticket.arrival_airport + "\n" +
+    "Flight Date: " + ticket.flight_date + "\n" +
+    "Flight Time: " + ticket.flight_time + "\n" +
+    "Seat: " + ticket.seat;
 });
 function loadPassengerScreen(data) {
     if (data.game_finished) {
@@ -115,6 +119,24 @@ function showPassenger(data) {
     const description = data.description;
     const passport = data.passport;
     const status = data.status;
+
+    const passengerId = data.passenger_id;
+    const isAlien = data.species === "alien";
+
+    const passengerForSprite = {
+    id: passengerId,
+    true_species: isAlien ? 0 : 1
+};
+
+const spritePath = SpriteManager.getSprite(passengerForSprite, "def");
+const fallback = SpriteManager.getFallback("def");
+
+SpriteManager.loadSprite(
+    document.querySelector('#character-popup-image'),
+    spritePath,
+    fallback
+);
+
 
     document.querySelector('#day-info').innerText = "DAY: " + data.day + " DECEMBER";
 
@@ -173,7 +195,7 @@ function handleDecisionResult(data) {
 
         if (data.show_event) {
             document.querySelector('#daily-event').style.display = 'block';
-            document.querySelector('#daily-event').innerText = data.event.text;
+            document.querySelector('#event-text').innerText = data.event.text;
 
             document.querySelector('#event-option-1').innerText = data.event.option1;
             document.querySelector('#event-option-2').innerText = data.event.option2;
@@ -249,6 +271,11 @@ document.querySelector('#event-option-2').addEventListener('click', async functi
 });
 
 function showEventResult(data) {
+    if (data.game_finished) {
+        showEnding(data);
+        return;
+    }
+
     document.querySelector('#event-response-text').innerText = data.message;
 
     document.querySelector('#energy').innerText = "Energy: " + data.status.energy;
@@ -269,7 +296,7 @@ document.querySelector('#backstabber-option-1').addEventListener('click', async 
     document.querySelector('#backstabber-result').innerText = data.message;
 
     if (data.needs_boost_choice) {
-        document.querySelector('#backstabber-boost-options').style.display = 'block';
+        document.querySelector('#backstabber-boost-options').style.display = 'flex';
     } else {
         showBackstabberResult(data);
     }

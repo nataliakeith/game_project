@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+    <link href="UI.css" rel="stylesheet" >
+    <script src="spriteManager.js" defer></script>
     <script src="UI.js" defer></script>
 
 </head>
@@ -32,6 +34,7 @@
     </section>
 
     <section id="gameplay-screen" style="display: none;">
+        <div id="background"></div>
         <header id="gameplay-header">
             <h1 id="game-title">ANOMALY ANONYMOUS </h1>
             <h2 id="day-info">DAY: DATE/DEC </h2></header>
@@ -58,7 +61,7 @@
 
     <section id="character-section">
         <div id="character-container">
-            <img id="character" src="" alt="character-passenger">
+            <img id="character" src="AVATAR.png" alt="character-passenger">
             <button id="character-peek-button">PEEK</button>
         </div>
     </section>
@@ -142,11 +145,16 @@
     </div>
     <p id="backstabber-result"></p>
 </section>
-<section id="daily-event" style="display: none;">DAILY EVENT</section>
-            <button id="event-option-1" style="display: none;">OPTION 1</button>
-            <button id="event-option-2" style="display: none;">OPTION 2</button>
-            <p id="event-response-text"></p>
-            <button id ="event-continue-button" style="display: none;">CONTINUE</button>
+<section id="daily-event" style="display: none;">
+    <h2>DAILY EVENT</h2>
+    <p id="event-text"></p>
+
+    <button id="event-option-1">OPTION 1</button>
+    <button id="event-option-2">OPTION 2</button>
+
+    <p id="event-response-text"></p>
+    <button id="event-continue-button" style="display: none;">CONTINUE</button>
+</section>
 
     <section id="day-summary" style="display: none;">
         <p id="humans-approved">Humans approved: </p>
