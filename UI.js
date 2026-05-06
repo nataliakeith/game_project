@@ -175,7 +175,7 @@ document.querySelector('#accept-button').addEventListener('click', async functio
     handleDecisionResult(data);
 });
 function handleDecisionResult(data) {
-    if (data.game_finished) {
+    if (data.game_finished) { //Tapiwa, this is for handling most decisions but backstabebr and events
         showEnding(data);
         return;
     }
