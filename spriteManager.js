@@ -41,7 +41,7 @@ const SpriteManager = (() => {
         getSprite,
         getPassportSprite,
         getFallback,
-        loadSprite
+        loadSprite,
         renderPassenger
     };
 
