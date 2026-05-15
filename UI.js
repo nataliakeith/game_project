@@ -128,15 +128,14 @@ function showPassenger(data) {
     true_species: isAlien ? 0 : 1
 };
 
-const spritePath = SpriteManager.getSprite(passengerForSprite, "def");
-const fallback = SpriteManager.getFallback("def");
-
-SpriteManager.loadSprite(
+SpriteManager.renderPassenger(
     document.querySelector('#character-popup-image'),
-    spritePath,
-    fallback
+    passengerForSprite,
+    "def"
 );
+  
 
+    
 
     document.querySelector('#day-info').innerText = "DAY: " + data.day + " DECEMBER";
 
