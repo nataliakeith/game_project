@@ -42,6 +42,7 @@ const SpriteManager = (() => {
         getPassportSprite,
         getFallback,
         loadSprite
+        renderPassenger
     };
 
 })();
